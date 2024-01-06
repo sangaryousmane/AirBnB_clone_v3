@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """Defines the DBStorage engine."""
+
 from os import getenv
 from models.base_model import Base
 from models.base_model import BaseModel
@@ -13,6 +14,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
+import models
 
 
 class DBStorage:
@@ -82,3 +84,16 @@ class DBStorage:
     def close(self):
         """Close the working SQLAlchemy session."""
         self.__session.close()
+
+    def get(self, cls, id):
+        """ Get object by id
+        """
+        for key, value in models.storage.all(cls).items():
+            if key == cls + '.' + id:
+                return value
+        return None
+
+    def count(self, cls=None):
+        """ Count of object in storage
+        """
+        return len(models.storage.all(cls))
