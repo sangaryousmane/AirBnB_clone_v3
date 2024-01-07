@@ -8,6 +8,7 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
+import models
 
 
 class FileStorage:
@@ -68,3 +69,16 @@ class FileStorage:
     def close(self):
         """Call the reload method to close."""
         self.reload()
+
+    def get(self, cls, id):
+        """ Get object by id
+        """
+        for key, value in models.storage.all(cls).items():
+            if key == cls + '.' + id:
+                return value
+        return None
+
+    def count(self, cls=None):
+        """ Count of object in storage
+        """
+        return len(models.storage.all(cls))
