@@ -41,7 +41,7 @@ def delete_state(state_id):
     for j in states:
         if j.id == state_id:
             storage.delete(j)
-            storage.save(j)
+            storage.save()
     return jsonify({}), 200
 
 
@@ -68,11 +68,12 @@ def update_state(state_id):
     state = [s.to_dict() for s in states if s.id == state_id]
 
     if state == []:
-        abort(400)
+        abort(404)
     if not request.get_json():
         abort(400, 'Not a JSON')
-    state[0]['name'] = request.json.get('name')
+    state[0]['name'] = request.json['name']
     for obj in states:
         if obj.id == state_id:
-            obj.name = request.json.get("name")
+            obj.name = request.json["name"]
+    storage.save()
     return jsonify(state[0]), 200
