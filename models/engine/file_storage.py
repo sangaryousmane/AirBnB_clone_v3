@@ -73,9 +73,11 @@ class FileStorage:
     def get(self, cls, id):
         """ Get object by id
         """
-        for key, value in models.storage.all(cls).items():
-            if key == cls + '.' + id:
-                return value
+        obj_dict = models.storage.all(cls)
+        for k, v in obj_dict.items():
+            match = str(cls) + '.' + str(id)
+            if k == match:
+                return v
         return None
 
     def count(self, cls=None):
