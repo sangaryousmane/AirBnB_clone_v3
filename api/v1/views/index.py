@@ -29,5 +29,5 @@ def stats_count():
                    "reviews": "Review"}
 
     for count in all_classes:
-        counter_dict[cls] = storage.count(all_classes[count])
+        counter_dict[count] = storage.count(all_classes[count])
     return jsonify(counter_dict)
