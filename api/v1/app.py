@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 """ Entry point of the Restful service
 """
-from flask import Flask, make_response, jsonify
 from api.v1.views import app_views
-from models import storage
 from flask_cors import CORS
+from flask import Flask, make_response, jsonify
+from models import storage
 from os import getenv
 
 app = Flask(__name__)
