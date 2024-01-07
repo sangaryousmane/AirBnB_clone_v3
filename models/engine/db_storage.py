@@ -88,8 +88,10 @@ class DBStorage:
     def get(self, cls, id):
         """ Get object by id
         """
-        for key, value in models.storage.all(cls).items():
-            if key == cls + '.' + id:
+        dicts = models.storage.all(cls)
+        for key, value in dicts.items():
+            match = str(cls) + '.' + str(id)
+            if key == match:
                 return value
         return None
 
