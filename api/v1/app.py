@@ -22,7 +22,7 @@ def tear(self):
 
 
 @app.errorhandler(404)
-def status_code():
+def status_code(self):
     """ Return a custom error for http code 404
     """
     return make_response(jsonify({"error": "Not found"}), 404)
