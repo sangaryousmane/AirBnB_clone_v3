@@ -5,6 +5,7 @@ from flask import Flask, make_response, jsonify
 from api.v1.views import app_views
 from models import storage
 from flask_cors import CORS
+from os import getenv
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "0.0.0.0"}})
@@ -31,6 +32,9 @@ def status_code():
 
 if __name__ == '__main__':
     if getenv("HBNB_API_HOST") and getenv("HBNB_API_PORT"):
-        app.run(host=HBNB_API_HOST, port=int(HBNB_API_PORT), threaded=True)
+        HBNB_API_HOST = getenv("HBNB_API_HOST")
+        HBNB_API_PORT = int(getenv("HBNB_API_PORT"))
     else:
-        app.run(host='0.0.0.0', port=5000)
+        HBNB_API_HOST = '0.0.0.0'
+        HBNB_API_PORT = 5000
+    app.run(host=HBNB_API_HOST, port=HBNB_API_PORT, threaded=True)
