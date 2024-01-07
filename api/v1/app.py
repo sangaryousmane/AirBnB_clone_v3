@@ -16,11 +16,9 @@ app.register_blueprint(app_views)
 
 
 @app.teardown_appcontext
-def teardown():
-    """ close storage
-    """
-    if storage:
-        storage.close()
+def tear(self):
+    ''' closes storage engine '''
+    storage.close()
 
 
 @app.errorhandler(404)

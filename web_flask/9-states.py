@@ -7,8 +7,10 @@ from models.state import State
 app = Flask('__name__')
 
 @app.teardown_appcontext
-def refresh(exception):
-        models.storage.close()
+def refresh(self):
+    """ Refresh
+    """
+    models.storage.close()
 
 
 @app.route("/states", strict_slashes=False)

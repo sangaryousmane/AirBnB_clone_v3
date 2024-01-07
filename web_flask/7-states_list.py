@@ -62,7 +62,7 @@ def display_odd_or_even(n):
 
 
 @app.teardown_appcontext
-def close_session(exception=None):
+def close_session(self):
     """Closes the SQLAlchemy Session after each request.
     """
     if storage is not None:
