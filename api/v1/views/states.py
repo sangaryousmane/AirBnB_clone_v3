@@ -34,7 +34,7 @@ def delete_state(state_id):
     """
     states = storage.all(State).values()
     result = [s.to_dict() for s in states if s.id == state_id]
-    if state_id == []:
+    if result == []:
         abort(404)
     result.remove(result[0])
 
