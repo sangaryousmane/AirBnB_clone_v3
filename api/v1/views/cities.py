@@ -2,10 +2,11 @@
 """Cities view
 """
 from api.v1.views import app_views
+from datetime import datetime
 from flask import abort, jsonify, request
+from models.City import City
 from models import storage
 from models.state import State
-from datetime import datetime
 
 
 @app_views.route("/states/<state_id>/cities", methods=['GET'])
@@ -20,8 +21,8 @@ def get_all_cities(state_id):
         abort(404)
 
     cities = storage.all(City).values()
-    city = [c.to_dict() for c in cities if c.state_id == state_id]
-    return jsonify(city), 200
+    city = [c.to_dict() for c in cities if state_id == c.state_id]
+    return jsonify(city)
 
 
 @app_views.route("/cities/<city_id>", methods=['GET'])
@@ -41,9 +42,9 @@ def save_city(state_id):
     """ Creates a new city and save to DB
     """
     if not request.get_json():
-        abort(400)
-    if 'name' not in request.json['name']:
         abort(400, 'Not a JSON')
+    if 'name' not in request.json['name']:
+        abort(400, 'Missing name')
     states = storage.all(State).values()
     state = [s.to_dict() for s in states if s.id == state_id]
     if state == []:
