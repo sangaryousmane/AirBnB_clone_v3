@@ -43,7 +43,7 @@ def save_city(state_id):
     """
     if not request.get_json():
         abort(400, 'Not a JSON')
-    if 'name' not in request.json['name']:
+    if 'name' not in request.get_json():
         abort(400, 'Missing name')
     states = storage.all(State).values()
     state = [s.to_dict() for s in states if s.id == state_id]
@@ -76,7 +76,7 @@ def delete_city(city_id):
     return jsonify({}), 200
 
 
-@app_views.route("/cities/<city_id>", methods=['UPDATE'])
+@app_views.route("/cities/<city_id>", methods=['PUT'])
 def update_city(city_id):
     """ Update city info
     """
