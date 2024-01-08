@@ -9,90 +9,85 @@ from models import storage
 from models.state import State
 from models.user import User
 
-@app_views.route("/states/<state_id>/cities", methods=['GET'])
-@app_views.route("/states/<state_id>/cities/", methods=['GET'])
-def get_all_cities(state_id):
-    """ Retrieves all the cities of a state
+@app_views.route("/users", methods=['GET'])
+def get_all_users():
+    """ Retrieves all the users info
     """
-    states = storage.all(State).values()
-    state = [s.to_dict() for s in states if s.id == state_id]
+    users = storage.all(User).values()
+    user = [s.to_dict() for s in states]
 
-    if state == []:
+    if user == []:
         abort(404)
 
-    cities = storage.all(City).values()
-    city = [c.to_dict() for c in cities if state_id == c.state_id]
-    return jsonify(city)
+    return jsonify(user)
 
 
-@app_views.route("/cities/<city_id>", methods=['GET'])
-def get_city(city_id):
-    """ Get a city info
+@app_views.route("/users/<user_id>", methods=['GET'])
+def get_user(user_id):
+    """ Get a user info
     """
-    cities = storage.all(City).values()
-    city = [c.to_dict() for c in cities if c.id == city_id]
-    if city == []:
+    users = storage.all(User).values()
+    user = [u.to_dict() for u in users if u.id == user_id]
+    if user == []:
         abort(404)
-    return jsonify(city[0]), 200
+    return jsonify(user[0]), 200
 
 
-@app_views.route("/states/<state_id>/cities", methods=['POST'])
-@app_views.route("/states/<state_id>/cities/", methods=['POST'])
-def save_city(state_id):
-    """ Creates a new city and save to DB
+@app_views.route("/users", methods=['POST'])
+def save_state(state_id):
+    """ Creates a new user and save to DB
     """
     if not request.get_json():
         abort(400, 'Not a JSON')
-    if 'name' not in request.get_json():
-        abort(400, 'Missing name')
-    states = storage.all(State).values()
-    state = [s.to_dict() for s in states if s.id == state_id]
-    if state == []:
-        abort(404)
-
-    city = []
-    new_city = City(name=request.json['name'], state_id=state_id)
-    storage.new(new_city)
+    if 'email' not in request.get_json():
+        abort(400, 'Missing email')
+    if 'password' not in request.get_json():
+        abort(400, 'Missing password')
+    
+    user = []
+    name, password = request.json['password'], request.json['name']
+    new_user = User(name=name, password=password)
+    storage.new(new_user)
     storage.save()
-    city.append(new_city.to_dict())
-    return jsonify(city[0]), 201
+    user.append(new_user.to_dict())
+    return jsonify(user[0]), 201
 
 
-@app_views.route("/cities/<city_id>", methods=['DELETE'])
-def delete_city(city_id):
-    """ Delete an info for city
+@app_views.route("/user/<user_id>", methods=['DELETE'])
+def delete_user(user_id):
+    """ Delete a User from DB
     """
-    cities = storage.all(City).values()
-    city = [c.to_dict() for c in cities if c.id == city_id]
+    users = storage.all(User).values()
+    user = [u.to_dict() for u in users if u.id == user_id]
 
-    if city == []:
+    if user == []:
         abort(404)
 
-    city.remove(city[0])
-    for c in cities:
-        if c.id == city_id:
-            storage.delete(c)
+    user.remove(user[0])
+    for u in users:
+        if u.id == user_id:
+            storage.delete(u)
             storage.save()
     return jsonify({}), 200
 
 
-@app_views.route("/cities/<city_id>", methods=['PUT'])
-def update_city(city_id):
-    """ Update city info
+@app_views.route("/users/<user_id>", methods=['PUT'])
+def update_user(user_id):
+    """ Update a user info
     """
-    cities = storage.all(City).values()
-    city = [c.to_dict() for c in cities if c.id == city_id]
+    users = storage.all(User).values()
+    user = [u.to_dict() for u in users if u.id == user_id]
 
-    if city == []:
+    if user == []:
         abort(404)
 
     if not request.get_json():
         abort(400, 'Not a JSON')
 
-    city[0]['name'] = request.json['name']
+    user[0]['name'] = request.json['name']
 
-    for c in cities:
-        if c.id == city_id:
-            c.name = request.json['name']
+    for u in users:
+        if u.id == user_id:
+            u.name = request.json['name']
     storage.save()
-    return jsonify(city[0]), 200
+    return jsonify(user[0]), 200
