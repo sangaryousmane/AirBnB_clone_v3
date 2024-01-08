@@ -11,7 +11,6 @@ from models.state import State
 
 
 @app_views.route("/amenities", methods=['GET'])
-@app_views.route("/amenities/", methods=['GET'])
 def get_all_amenities():
     """ Get all amenities
     """
@@ -28,7 +27,7 @@ def get_amenity(amenity_id):
     """ Get an amenity
     """
     amenities = storage.all(Amenity).values()
-    amenity   = [a.to_dict() for a in amenities if a.id == amenity_id]
+    amenity = [a.to_dict() for a in amenities if a.id == amenity_id]
 
     if amenity == []:
         abort(404)
@@ -51,6 +50,7 @@ def save_amenity():
     amenity.append(new_amenity.to_dict())
     return (amenity[0]), 201
 
+
 @app_views.route("/amenities/<amenity_id>", methods=['DELETE'])
 def delete_amenity(amenity_id):
     """ Delete an amenity
@@ -68,13 +68,14 @@ def delete_amenity(amenity_id):
             storage.save()
     return jsonify({}), 200
 
+
 @app_views.route("/amenities/<amenity_id>", methods=['PUT'])
 def update_an_amenity(amenity_id):
     """ Update an amenity base on the given ID
     """
     if not request.get_json():
         abort(400)
-    
+
     amenities = storage.all(Amenity).values()
     amenity = [a.to_dict() for a in amenities if a.id == amenity_id]
 
