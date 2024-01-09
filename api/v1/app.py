@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+''' app.py '''
 from api.v1.views import app_views
 from flask_cors import CORS
 from flask import Flask, make_response, jsonify
@@ -15,14 +16,14 @@ app.register_blueprint(app_views)
 
 @app.teardown_appcontext
 def tear(self):
-    """ closes storage engine """
+    ''' closes storage engine '''
     storage.close()
 
 
 @app.errorhandler(404)
 def status_code(self):
-    """ Return a custom error for http code 404
-    """
+    ''' Return a custom error for http code 404
+    '''
     return make_response(jsonify({"error": "Not found"}), 404)
 
 
