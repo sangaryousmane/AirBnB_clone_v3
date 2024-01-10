@@ -88,12 +88,18 @@ class DBStorage:
     def get(self, cls, id):
         """ Get object by id
         """
+        classes = {"Amenity": Amenity, "City": City,
+                   "Place": Place, "Review": Review,
+                   "State": State, "User": User}
         dicts = models.storage.all(cls)
-        for key, value in dicts.items():
-            match = str(cls) + '.' + str(id)
-            if key == match:
-                return value
-        return None
+        if cls is not None and type(cls) is str and id is not None and\
+                type(id) is str and cls in classes:
+                    cls = classes[cls]
+                    result = self.__session.query(cls).filter(cls.id == id)
+                    Object = result.first()
+                    return Object
+        else:
+            return None
 
     def count(self, cls=None):
         """ Count of object in storage
