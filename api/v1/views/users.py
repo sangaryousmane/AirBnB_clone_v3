@@ -9,6 +9,7 @@ from models import storage
 from models.state import State
 from models.user import User
 
+
 @app_views.route("/users", methods=['GET'])
 def get_all_users():
     """ Retrieves all the users info
@@ -43,7 +44,7 @@ def save_state(state_id):
         abort(400, 'Missing email')
     if 'password' not in request.get_json():
         abort(400, 'Missing password')
-    
+
     user = []
     name, password = request.json['password'], request.json['name']
     new_user = User(name=name, password=password)
