@@ -88,6 +88,7 @@ class TestFileStorage(unittest.TestCase):
     def test_save(self):
         """Test that save properly saves objects to file.json"""
 
+<<<<<<< HEAD
     def test_get_db(self):
         """ Tests method for obtaining an instance db storage"""
         dic = {"name": "Cundinamarca"}
@@ -96,7 +97,35 @@ class TestFileStorage(unittest.TestCase):
         storage.save()
         get_instance = storage.get(State, instance.id)
         self.assertEqual(get_instance, instance)
+=======
+    @unittest.skipIf(type(models.storage) == FileStorage,
+                     "Testing FileStorage")
+    def test_reload(self):
+        """Test reload method."""
+        og_session = self.storage._DBStorage__session
+        self.storage.reload()
+        self.assertIsInstance(self.storage._DBStorage__session, Session)
+        self.assertNotEqual(og_session, self.storage._DBStorage__session)
+        self.storage._DBStorage__session.close()
+        self.storage._DBStorage__session = og_session
 
+    @unittest.skipIf(type(models.storage) == FileStorage,
+                     "Test File storage")
+    def test_get(self):
+        '''
+            Test if get method retrieves obj requested
+        '''
+        new_state = State(name="NewYork")
+        storage.new(new_state)
+        storage.save()
+        result = storage.get("State", new_state.id)
+        self.assertTrue(result.id, new_state.id)
+        self.assertIsInstance(result, State)
+        self.assertEqual(new_state, result)
+>>>>>>> cc2987ccb05104f2811cea01580e3a34fd386551
+
+    @unittest.skipIf(type(models.storage) == FileStorage,
+                     "Testing file storage")
     def test_count(self):
         """ Tests count method db storage """
         dic = {"name": "Vecindad"}

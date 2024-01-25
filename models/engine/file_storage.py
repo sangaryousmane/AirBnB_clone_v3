@@ -75,6 +75,7 @@ class FileStorage:
 
     def get(self, cls, id):
         """
+<<<<<<< HEAD
         Returns the object based on the class name and its ID, or
         None if not found
         """
@@ -86,6 +87,13 @@ class FileStorage:
             if (value.id == id):
                 return value
 
+=======
+        obj_dict = models.storage.all(cls)
+        for k, v in obj_dict.items():
+            match = str(cls) + '.' + str(id)
+            if k == match:
+                return v
+>>>>>>> cc2987ccb05104f2811cea01580e3a34fd386551
         return None
 
     def count(self, cls=None):

@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 
 @app.teardown_appcontext
+<<<<<<< HEAD
 def close_db(error):
     """ Remove the current SQLAlchemy Session """
     storage.close()
@@ -38,4 +39,30 @@ def cities_list():
 
 if __name__ == "__main__":
     """ Main Function """
+=======
+def close_session(self):
+    """Closes the SQLAlchemy Session after each request.
+    """
+    if storage is not None:
+        storage.close()
+
+
+@app.route("/states_list", strict_slashes=False)
+def display_states():
+    """ Display states from db
+    """
+    states = storage.all('State').order_by(State.name).all()
+    return render_template("7-states_list.html", states=states.values())
+
+
+@app.route("/cities_by_states", strict_slashes=False)
+def display_cities_with_states():
+    """ Display cities with state
+    """
+    states = storage.all('State')
+    return render_template("8-cities_by_states.html", states=states.values())
+
+
+if __name__ == '__main__':
+>>>>>>> cc2987ccb05104f2811cea01580e3a34fd386551
     app.run(host='0.0.0.0', port=5000)
